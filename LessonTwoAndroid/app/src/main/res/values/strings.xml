@@ -11,7 +11,7 @@
     <string name="button_9">9</string>
     <string name="button_0">0</string>
     <string name="button_equals">=</string>
-    <string name="button_delete">/</string>
+    <string name="button_division">/</string>
     <string name="button_multiply">*</string>
     <string name="button_addition">+</string>
     <string name="button_subtraction">-</string>
