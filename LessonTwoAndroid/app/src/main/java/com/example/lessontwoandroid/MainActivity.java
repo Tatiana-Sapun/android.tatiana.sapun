@@ -1,6 +1,9 @@
 package com.example.lessontwoandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +17,19 @@ public class MainActivity extends AppCompatActivity {
     TextView operationField;
     Integer operand = null;
     String lastOperation = "=";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        findViewById(R.id.button_settings).setOnClickListener(v -> {
+            Intent intent = new Intent(this, Settings.class);
+            startActivity(intent);
+
+        });
+
 
         resultField = findViewById(R.id.resultField);
         numberField = findViewById(R.id.numberField);
