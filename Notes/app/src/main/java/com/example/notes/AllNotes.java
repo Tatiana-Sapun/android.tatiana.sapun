@@ -1,6 +1,8 @@
 package com.example.notes;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 
@@ -12,6 +14,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import static android.icu.text.DisplayContext.LENGTH_SHORT;
 
 
 public class AllNotes extends Fragment {
@@ -40,6 +47,22 @@ public class AllNotes extends Fragment {
                  fragmentTransaction.commit();
 
             }
+        });
+
+        getActivity().findViewById(R.id.close).setOnClickListener(v -> {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Закрыть")
+                    .setMessage("Вы действительно хотите закрыть приложение?")
+                    .setPositiveButton("Нет",((dialog, which) -> {
+
+                    }))
+                    .setNegativeButton("Да", ((dialog, which) -> {
+                         Context context = getActivity();
+                         Toast.makeText(context, "Пока", Toast.LENGTH_SHORT).show();
+                         System.exit(0);
+                    }))
+                    .show();
+
         });
     }
 
