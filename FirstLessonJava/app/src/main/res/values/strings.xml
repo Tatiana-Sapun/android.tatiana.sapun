@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">First Lesson Java</string>
+    <string name="hello">Hello</string>
+    <string name="button">Button</string>
+    <string name="check_box">Click me</string>
+
+
+</resources>
