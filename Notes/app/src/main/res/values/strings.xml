@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title1">Зимний двор</string>
+    <string name="title2">Новогоднее настроение</string>
+    <string name="title3">Звон новогодних бакалов</string>
+    <string name="title4">Подготовка к празднику</string>
+    <string name="title5">Осыпанный снегом город</string>
+    <string name="title6">Праздничное утро в дуревне</string>
+    <string name="title7">Снегопад</string>
+    <string name="description1">Засыпанный снегом двор</string>
+    <string name="description2">Украшение окон мндаринами</string>
+    <string name="description3">Застолье</string>
+    <string name="description4">Новогодние приготовления салатов</string>
+    <string name="description5">Улицы покрытые толстым слоем снега</string>
+    <string name="description6">Конная прогулка в новогоднее утро</string>
+    <string name="description7">Стильный образ в первый снегопад</string>
+</resources>
