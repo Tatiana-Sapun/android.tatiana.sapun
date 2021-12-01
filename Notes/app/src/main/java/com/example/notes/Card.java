@@ -5,20 +5,17 @@ import androidx.annotation.IdRes;
 public class Card {
     private final String title;
     private final String description;
-    @IdRes
     private final int image;
-    private final  boolean like;
 
-    public Card(String title, String description, int image, boolean like) {
+
+    public Card(String title, String description, int image) {
         this.title = title;
         this.description = description;
         this.image = image;
-        this.like = like;
+
     }
 
-    public Card(String title, String description, int image) {
-        this(title,description, image, false);
-    }
+
 
     public String getTitle() { return title; }
 
@@ -26,5 +23,5 @@ public class Card {
 
     public int getImage() { return image; }
 
-    public boolean isLike() { return like; }
+
 }

@@ -1,5 +1,6 @@
 package com.example.notes;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,22 +8,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHolder> {
     //далее добавляем все, что ему нужно по подсказкам
 
     public static final String TAG="CardAdapter";
-    private final List<Card> cardList;
+    private final CardSource source;
+    private final Activity activity;
     private onCardClickListener clickListener;
+    private int menuPosition = -1;
 
 
-    public CardsAdapter(List<Card> cardList) {
-        this.cardList = cardList;
+    public int getMenuPosition() {
+        return menuPosition;
+    }
+
+
+    public CardsAdapter(Activity activity,CardSource source) {
+        this.source = source;
+        this.activity=activity;
     }
 
     public void setCardClickListener(onCardClickListener clickListener) {
@@ -44,7 +52,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     //нам передается готовый холдер и задаем позицию
     @Override
     public void onBindViewHolder(@NonNull CardsAdapter.CardViewHolder holder, int position) {
-        holder.bind(cardList.get(position));
+        holder.bind(source.getCard(position));
         Log.d(TAG, "onBindViewHolder" + position);
     }
 
@@ -52,15 +60,26 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
     // его можно обманывать, довалять и удалять элементы
     @Override
     public int getItemCount() {
-        return cardList.size();
+        return source.size();
     }
     //RecyclerView.Adapter джинерик и ему нежен класс холдер
+
+
 
     class CardViewHolder extends RecyclerView.ViewHolder{
         TextView textView= itemView.findViewById(R.id.text_view);
 
+
         public CardViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    menuPosition = getLayoutPosition();
+                    return false;
+                }
+            });
+            activity.registerForContextMenu(itemView);
         }
 
         void bind(Card card){
@@ -78,3 +97,4 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardViewHold
 
     }
 }
+

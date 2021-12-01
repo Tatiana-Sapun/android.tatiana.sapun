@@ -1,32 +1,39 @@
 package com.example.notes;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static android.icu.text.DisplayContext.LENGTH_SHORT;
-
 
 public class AllNotes extends Fragment{
+
+    private CardSource source;
+    private CardsAdapter adapter;
+    Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +55,7 @@ public class AllNotes extends Fragment{
                   FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.container, new CreateNote());
                 fragmentTransaction.addToBackStack(null);
-                 fragmentTransaction.commit();
+                fragmentTransaction.commit();
 
             }
         });
@@ -69,33 +76,71 @@ public class AllNotes extends Fragment{
 
         });
 
-        List<Card> cardList = Arrays.asList(
-                new Card (getString(R.string.title1),getString(R.string.description1),R.drawable.winter1),
-                new Card (getString(R.string.title2),getString(R.string.description2),R.drawable.winter2),
-                new Card (getString(R.string.title3),getString(R.string.description3),R.drawable.winter3),
-                new Card (getString(R.string.title4),getString(R.string.description4),R.drawable.winter3),
-                new Card (getString(R.string.title5),getString(R.string.description5),R.drawable.winter5),
-                new Card (getString(R.string.title6),getString(R.string.description6),R.drawable.winter6),
-                new Card (getString(R.string.title7),getString(R.string.description7),R.drawable.winter7)
-        );
+
         // ищем и заполняем наш RecyclerView
         RecyclerView recyclerView = getActivity().findViewById(R.id.recycler_view);
-        CardsAdapter adapter = new CardsAdapter(cardList);
+        source= new CardSourceImp(context);
+
+        adapter = new CardsAdapter(getActivity(),source);
         adapter.setCardClickListener((v,position)->{
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, new OpenNote());
+               fragmentTransaction.replace(R.id.container, new OpenNote());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
 
-        });
+       });
+
 
         recyclerView.setAdapter(adapter);
         //далее создаем класс адапрера
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+   }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.action_add) {
+            source.addCard(
+                    new Card("Новая карточка", " описание", R.drawable.winter3)
+            );
+            adapter.notifyItemInserted(source.size()-1);
+            return true;
+        } else if(item.getItemId()==R.id.action_clear){
+            int size = source.size();
+            source.clearCards();
+            adapter.notifyItemRangeRemoved(0, size);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    // регистрация
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getActivity().getMenuInflater().inflate(R.menu.card_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_delete){
+            // по какой позиции удалять
+            source.deleteCard(adapter.getMenuPosition());
+            return true;
+        }else if(item.getItemId() ==R.id.action_update){
+            source.updateCard(adapter.getMenuPosition(),
+                    new Card("Новая карточка", " описание", R.drawable.winter3));
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
 }
 
